@@ -51,14 +51,14 @@ class Deck:
             for i in self.in_hand:
                 print(self._outer.read_card(i))
 
-    def __init__(self, players : int = 2, hand_limit : int = None):
+    def __init__(self, players : int = 2, hand_limit : int = None, hand_size : int = 5):
         Deck.cards = self.build_deck()
         self.shuffle()
         self.discards = []
         self.players = {}
         self.hand_limit = hand_limit
         for i in range(players):
-            self.players[i] = self.Hand(self)
+            self.players[i] = self.Hand(self, hand_size = hand_size)
 
 
     def read_player_hand(self, player : int):
@@ -73,4 +73,4 @@ class Deck:
 
 
 
-test = Deck(hand_limit = 5)
+# test = Deck(hand_limit = 5)
