@@ -6,6 +6,8 @@ valid_input = {'A' : 'A', 'K' : 'K', 'Q' : 'Q', 'J' : 'J', '10' : 'T', '9' : '9'
                '8' : '8', '7' : '7', '6' : '6', '5' : '5', '4' : '4', '3' : '3', 
                '2' : '2'}
 
+# TODO: Define function that looks for matches of 4 in-hand, removes them, and awards a point.
+
 def find_card(card:str, player) -> list:
     """It Is Assumed Card Is The Value, Not The Suit"""
     results = []
@@ -15,10 +17,12 @@ def find_card(card:str, player) -> list:
     return results
 
 def take_card(cards : list, player : int, target : int):
-    pass
+    for c in sorted(cards, reverse = True):
+        deck.players[player].in_hand.append(deck.players[target].in_hand.pop(c))
 
 
 def ask_card(player : int, target : int):
+    #TODO: Make Sure command Returns True if player guesses correctly
     deck.read_player_hand(player)
     valid_guess = False
     while valid_guess == False:
