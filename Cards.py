@@ -32,13 +32,20 @@ class Deck:
 
 
     class Hand:
-        def drawCard(self, numCard : int = 1) -> None:
+        def drawCard(self, numCard : int = 1, text_output : bool = False) -> list:
+            drawn = []
             for i in range(numCard):
                 if self._outer.hand_limit == None or self._outer.hand_limit > len(self.in_hand):
-                    self.in_hand.append(self._outer.cards.pop())
+                    card = self._outer.cards.pop()
+                    drawn.append(card)
+                    self.in_hand.append(card)
                 else:
                     print("Hand At Maximum Size! Was Only Able To Draw {}".format(i))
                     break
+            if text_output:
+                return drawn
+            else:
+                return []
             
 
         def __init__(self, outer, hand_size : int = 5):
