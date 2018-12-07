@@ -2,19 +2,22 @@
 
 import random
 
-suits = {'H' : 'Hearts', 'D' : 'Diamonds', 'C' : 'Clubs', 'S' : 'Spades'}
 
-values = {'A' : 'Ace', 'K' : 'King', 'Q' : 'Queen', 'J' : 'Jack', 'T' : 'Ten',
-          '9' : 'Nine', '8' : 'Eight', '7' : 'Seven', '6' : 'Six', '5' : 'Five',
-           '4' : 'Four', '3' : 'Three', '2' : 'Two'}
 
 #TODO: Make a Dictionary to store ranking for card power. Use a float: suit ranking.card ranking.
 # S = 4, H = 3, D = 2, C = 1
 
 class Deck:
 
+    suits = {'H' : 'Hearts', 'D' : 'Diamonds', 'C' : 'Clubs', 'S' : 'Spades'}
+
+    values = {'A' : 'Ace', 'K' : 'King', 'Q' : 'Queen', 'J' : 'Jack', 'T' : 'Ten',
+          '9' : 'Nine', '8' : 'Eight', '7' : 'Seven', '6' : 'Six', '5' : 'Five',
+           '4' : 'Four', '3' : 'Three', '2' : 'Two'}
+
     @staticmethod
     def build_deck() -> list:
+        global suits, values
         deck = []
         for s in suits:
             for v in values:
@@ -28,6 +31,7 @@ class Deck:
 
     @staticmethod
     def read_card(card:str) -> str:
+        global suits, values
         return '{} of {}'.format(values[card[0]], suits[card[1]])
 
 
@@ -52,6 +56,7 @@ class Deck:
             self._outer = outer
             self.in_hand = []
             self.drawCard(hand_size)
+            self.score = 0
         
         def see_hand(self):
             print('Cards In Hand')
@@ -73,6 +78,10 @@ class Deck:
             print("Player Not Found")
         else:
             self.players[player].see_hand()
+
+    def discard(self, player : int, index : int):
+        self.discards.append(self.players[player].in_hand.pop(index))
+
 
     def __repr__(self):
         return super().__repr__()

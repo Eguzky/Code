@@ -21,7 +21,21 @@ def find_card(card:str, player) -> list:
 def take_card(cards : list, player : int, target : int):
     for c in sorted(cards, reverse = True):
         deck.players[player].in_hand.append(deck.players[target].in_hand.pop(c))
-        #TODO: List Cards Taken With A Correct Guess
+    print('You Got {}!'.format(len(cards)))
+
+def count_score(player : int):
+    count_hand = {}
+    for c in deck.players[player].in_hand:
+        val = c[0]
+        count_hand.setdefault(val, 0)
+        count_hand[val] += 1
+    for b in count_hand:
+        if count_hand[b] == 4:
+            print('You Have A Book of {}s!'.format(deck.values[b]))
+            deck.players[player].score += 1
+            for i in sorted(find_card(b, player), reverse = True):
+                deck.discard(player, i)
+
 
 
 def ask_card(player : int, target : int):
@@ -55,5 +69,5 @@ def ask_card(player : int, target : int):
             print('Please Enter A Valid Card Value!')
             print(val_list)
 
-deck.read_player_hand(1)
-ask_card(0, 1)
+#deck.read_player_hand(1)
+#ask_card(0, 1)
