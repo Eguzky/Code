@@ -1,4 +1,5 @@
 import Cards
+import KAI
 
 deck = Cards.Deck(hand_size = 7)
 
@@ -71,3 +72,5 @@ def ask_card(player : int, target : int):
 
 #deck.read_player_hand(1)
 #ask_card(0, 1)
+# ai = KAI.AI_Gofish(deck.players[1])
+# ai.guesscard()

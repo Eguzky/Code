@@ -15,12 +15,12 @@ class Deck:
           '9' : 'Nine', '8' : 'Eight', '7' : 'Seven', '6' : 'Six', '5' : 'Five',
            '4' : 'Four', '3' : 'Three', '2' : 'Two'}
 
-    @staticmethod
-    def build_deck() -> list:
-        global suits, values
+    
+    def build_deck(self) -> list:
+        
         deck = []
-        for s in suits:
-            for v in values:
+        for s in self.suits:
+            for v in self.values:
                 deck.append(v + s) # Example: 2H, Two of Hearts
 
         return deck
@@ -29,10 +29,9 @@ class Deck:
         for i in range(100):
             random.shuffle(self.cards)
 
-    @staticmethod
-    def read_card(card:str) -> str:
-        global suits, values
-        return '{} of {}'.format(values[card[0]], suits[card[1]])
+    
+    def read_card(self, card:str) -> str:
+        return '{} of {}'.format(self.values[card[0]], self.suits[card[1]])
 
 
     class Hand:
