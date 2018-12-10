@@ -7,7 +7,6 @@ valid_input = {'A' : 'A', 'K' : 'K', 'Q' : 'Q', 'J' : 'J', '10' : 'T', '9' : '9'
                '8' : '8', '7' : '7', '6' : '6', '5' : '5', '4' : '4', '3' : '3', 
                '2' : '2'}
 
-# TODO: Define function that looks for matches of 4 in-hand, removes them, and awards a point.
 
 def find_card(card:str, player) -> list:
     """It Is Assumed Card Is The Value, Not The Suit"""
@@ -36,6 +35,24 @@ def count_score(player : int):
             deck.players[player].score += 1
             for i in sorted(find_card(b, player), reverse = True):
                 deck.discard(player, i)
+    # Check To See If Game Is Over
+    if len(deck.players[player].in_hand) == 0:
+        # First loop, find everyone's scores. Second loop, call winner or draws
+        high_score = 0
+        for p in deck.players:
+            if deck.players[p].score > high_score:
+                high_score = deck.players[p].score
+        winner = []
+        for p in deck.players:
+            if deck.players[p].score == high_score:
+                winner.append(p)
+        if len(winner) == 1:
+            print('{} Has Won With A Score Of {}!'.format(deck.players[winner[0]].name, high_score))
+        else:
+            print('We Have A Draw With A Score Of {}!'.format(high_score))
+            for p in winner:
+                print('{} Wins!'.format(deck.players[p].name))
+
 
 
 
@@ -72,5 +89,5 @@ def ask_card(player : int, target : int):
 
 #deck.read_player_hand(1)
 #ask_card(0, 1)
-# ai = KAI.AI_Gofish(deck.players[1])
-# ai.guesscard()
+ai = KAI.AI_Gofish(deck.players[1])
+ai.guesscard()

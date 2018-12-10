@@ -49,6 +49,9 @@ class Deck:
                 return drawn
             else:
                 return []
+    
+        def set_name(self):
+            self.name = input('Please Type Your Name: ')
             
 
         def __init__(self, outer, hand_size : int = 5):
@@ -56,6 +59,7 @@ class Deck:
             self.in_hand = []
             self.drawCard(hand_size)
             self.score = 0
+            self.name = ''
         
         def see_hand(self):
             print('Cards In Hand')
