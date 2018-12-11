@@ -1,5 +1,6 @@
 import Cards
 import KAI
+import random
 
 deck = Cards.Deck(hand_size = 7)
 
@@ -56,11 +57,16 @@ def count_score(player : int):
 
 
 
-def ask_card(player : int, target : int):
-    deck.read_player_hand(player)
+def ask_card(player : int, target : int, guess : str = None):
+    if guess == None:
+        deck.read_player_hand(player)
     valid_guess = False
     while valid_guess == False:
-        request = input("Ask For A Card You Have: ")
+        if guess == None:
+            request = input("Ask For A Card You Have: ")
+        else:
+            request = guess
+            print('{Player} Guessed {guess}'.format(Player = deck.players[player].name, guess = request))
         if request in valid_input:
             have_card = find_card(request, player)
             if len(have_card) > 0:
@@ -82,12 +88,34 @@ def ask_card(player : int, target : int):
                         return False
             else:
                 print('Pick A Card You Have')
+                if guess != None:
+                    print('Error: Guess Invalid')
+                    return True
         else:
             val_list = sorted(list(valid_input.keys()))
             print('Please Enter A Valid Card Value!')
             print(val_list)
 
+def gameplay_loop():
+    playing = True
+    while playing:
+        for p in deck.players:
+            if playing == False:
+                break
+            turn = True
+            while turn:
+                players = deck.players.keys()
+                players.remove(p)
+                if deck.players[p].isAI:
+                    target = random.choice(players)
+                    turn = ask_card(p, target, deck.players[p].AI_data.guesscard())
+                else:
+                    input('Pick A Player To Ask: ')
+
 #deck.read_player_hand(1)
 #ask_card(0, 1)
-ai = KAI.AI_Gofish(deck.players[1])
-ai.guesscard()
+deck.players[1].isAI = True
+deck.players[1].AI_data = KAI.AI_Gofish(deck.players[1])
+deck.players[1].name = 'AI Bob'
+ai = deck.players[1].AI_data
+ask_card(1, 0, ai.guesscard())
