@@ -52,6 +52,15 @@ class Deck:
     
         def set_name(self):
             self.name = input('Please Type Your Name: ')
+
+        def toggle_ai(self):
+            if self.isAI:
+                self.isAI = False
+                print("Player is no longer AI")
+            else:
+                self.isAI = True
+                print("Player is now AI")
+
             
 
         def __init__(self, outer, hand_size : int = 5):
@@ -60,6 +69,7 @@ class Deck:
             self.drawCard(hand_size)
             self.score = 0
             self.name = ''
+            self.isAI = False
         
         def see_hand(self):
             print('Cards In Hand')
