@@ -8,6 +8,7 @@ valid_input = {'A' : 'A', 'K' : 'K', 'Q' : 'Q', 'J' : 'J', '10' : 'T', '9' : '9'
                '8' : '8', '7' : '7', '6' : '6', '5' : '5', '4' : '4', '3' : '3', 
                '2' : '2'}
 
+game_over = False
 
 def find_card(card:str, player) -> list:
     """It Is Assumed Card Is The Value, Not The Suit"""
@@ -26,6 +27,7 @@ def take_card(cards : list, player : int, target : int):
 
 def count_score(player : int):
     count_hand = {}
+    global game_over
     for c in deck.players[player].in_hand:
         val = c[0]
         count_hand.setdefault(val, 0)
@@ -53,6 +55,7 @@ def count_score(player : int):
             print('We Have A Draw With A Score Of {}!'.format(high_score))
             for p in winner:
                 print('{} Wins!'.format(deck.players[p].name))
+        game_over = True
 
 
 
@@ -80,7 +83,8 @@ def ask_card(player : int, target : int, guess : str = None):
                     print('Go Fish!')
                     #Draw Card, Then Check To See If It Was Card Asked For. If So, Asker Goes Again#
                     draw = deck.players[player].drawCard(text_output = True)
-                    print(deck.read_card(draw[0]))
+                    if deck.players[player].isAI == False:
+                        print(deck.read_card(draw[0]))
                     if draw[0][0] == valid_input[request]:
                         print('Go Again!')
                         return True
@@ -104,18 +108,32 @@ def gameplay_loop():
                 break
             turn = True
             while turn:
-                players = deck.players.keys()
+                players = list(deck.players.keys())
                 players.remove(p)
                 if deck.players[p].isAI:
                     target = random.choice(players)
                     turn = ask_card(p, target, deck.players[p].AI_data.guesscard())
                 else:
-                    input('Pick A Player To Ask: ')
+                    p_dict = {}
+                    count = 0
+                    for i in players:
+                        count += 1
+                        p_dict[str(count)] = i
+                        print('{}. {}'.format(count, deck.players[i].name))
+                    target = input('Pick A Player To Ask: ')
+                    if target not in p_dict:
+                        print('Please Pick A Valid Number')
+                        continue
+                    turn = ask_card(p, p_dict[target])
+                if game_over:
+                    playing = False
+                    break
 
-#deck.read_player_hand(1)
-#ask_card(0, 1)
+
+
 deck.players[1].isAI = True
 deck.players[1].AI_data = KAI.AI_Gofish(deck.players[1])
 deck.players[1].name = 'AI Bob'
 ai = deck.players[1].AI_data
-ask_card(1, 0, ai.guesscard())
+deck.players[0].set_name()
+gameplay_loop()
