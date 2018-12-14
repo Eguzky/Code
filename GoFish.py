@@ -1,12 +1,13 @@
 import Cards
 import KAI
 import random
+import time
 
 deck = Cards.Deck(hand_size = 7)
 
 valid_input = {'A' : 'A', 'K' : 'K', 'Q' : 'Q', 'J' : 'J', '10' : 'T', '9' : '9',
                '8' : '8', '7' : '7', '6' : '6', '5' : '5', '4' : '4', '3' : '3', 
-               '2' : '2'}
+               '2' : '2', 'T' : 'T'}
 
 game_over = False
 
@@ -83,6 +84,8 @@ def ask_card(player : int, target : int, guess : str = None):
                     print('Go Fish!')
                     #Draw Card, Then Check To See If It Was Card Asked For. If So, Asker Goes Again#
                     draw = deck.players[player].drawCard(text_output = True)
+                    if len(draw) == 0:
+                        return False
                     if deck.players[player].isAI == False:
                         print(deck.read_card(draw[0]))
                     if draw[0][0] == valid_input[request]:
@@ -107,24 +110,30 @@ def gameplay_loop():
             if playing == False:
                 break
             turn = True
+            print("{}'s turn!".format(deck.players[p].name))
             while turn:
-                players = list(deck.players.keys())
-                players.remove(p)
-                if deck.players[p].isAI:
-                    target = random.choice(players)
-                    turn = ask_card(p, target, deck.players[p].AI_data.guesscard())
+                if len(deck.players[p].in_hand) > 0:
+                    players = list(deck.players.keys())
+                    players.remove(p)
+                    if deck.players[p].isAI:
+                        target = random.choice(players)
+                        turn = ask_card(p, target, deck.players[p].AI_data.guesscard())
+                    else:
+                        p_dict = {}
+                        count = 0
+                        for i in players:
+                            count += 1
+                            p_dict[str(count)] = i
+                            print('{}. {}'.format(count, deck.players[i].name))
+                        target = input('Pick A Player To Ask: ')
+                        if target not in p_dict:
+                            print('Please Pick A Valid Number')
+                            continue
+                        turn = ask_card(p, p_dict[target])
                 else:
-                    p_dict = {}
-                    count = 0
-                    for i in players:
-                        count += 1
-                        p_dict[str(count)] = i
-                        print('{}. {}'.format(count, deck.players[i].name))
-                    target = input('Pick A Player To Ask: ')
-                    if target not in p_dict:
-                        print('Please Pick A Valid Number')
-                        continue
-                    turn = ask_card(p, p_dict[target])
+                    print("Player out of cards, game over!")
+                count_score(p)
+                time.sleep(1)
                 if game_over:
                     playing = False
                     break
@@ -132,8 +141,12 @@ def gameplay_loop():
 
 
 deck.players[1].isAI = True
-deck.players[1].AI_data = KAI.AI_Gofish(deck.players[1])
+deck.players[1].AI_data = KAI.AI_Gofish(deck.players[1],1)
 deck.players[1].name = 'AI Bob'
 ai = deck.players[1].AI_data
-deck.players[0].set_name()
+#deck.players[0].set_name()
+deck.players[0].isAI = True
+deck.players[0].AI_data = KAI.AI_Gofish(deck.players[0])
+deck.players[0].name = 'AI Alpha'
+
 gameplay_loop()

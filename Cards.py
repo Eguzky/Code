@@ -39,6 +39,14 @@ class Deck:
             drawn = []
             for i in range(numCard):
                 if self._outer.hand_limit == None or self._outer.hand_limit > len(self.in_hand):
+                    if len(self._outer.cards) == 0:
+                        if len(self._outer.discards) == 0:
+                            print("There are no more cards in the deck nore discards.")
+                            break
+                        else:
+                            #TODO: Implement function to take cards from discards and put into deck, remove break once completed
+                            #TODO: Implement boolian to make sure this functionality is desired.
+                            break
                     card = self._outer.cards.pop()
                     drawn.append(card)
                     self.in_hand.append(card)
