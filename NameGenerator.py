@@ -18,4 +18,15 @@ def female_namegen():
     print("\n".join(female_group))
 
 def namegen():
-    input('[M]ale or [F]emale?')
+    while True:
+        gender = input('[M]ale or [F]emale? ')
+        if gender.upper() == 'M':
+            male_namegen()
+        elif gender.upper() == 'F':
+            female_namegen()
+        else:
+            print('Please use M or F')
+            continue
+        break
+
+namegen()
