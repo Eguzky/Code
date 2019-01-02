@@ -1,4 +1,4 @@
-from Cards import Deck
+from CardsEnhanced import Deck
 import random
 class AI:
     class Memory:
@@ -54,8 +54,8 @@ class AI_Gofish(AI):
         def setscheck(self):
             self.havesets = {}
             for card in self._outer.playerfile.in_hand:
-                self.havesets.setdefault(card[0], 0)
-                self.havesets[card[0]] += 1
+                self.havesets.setdefault(card.value, 0)
+                self.havesets[card.value] += 1
         
         def __init__(self, outer):
             super().__init__(outer)
