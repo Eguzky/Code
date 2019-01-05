@@ -71,10 +71,10 @@ class Deck:
 
             
 
-        def __init__(self, outer, hand_size : int = 5):
+        def __init__(self, outer):
             self._outer = outer
             self.in_hand = []
-            self.drawCard(hand_size)
+            #self.drawCard(hand_size)
             self.score = 0
             self.name = ''
             self.isAI = False
@@ -91,7 +91,13 @@ class Deck:
         self.players = {}
         self.hand_limit = hand_limit
         for i in range(players):
-            self.players[i] = self.Hand(self, hand_size = hand_size)
+            self.players[i] = self.Hand(self)
+        for i in range(hand_size):
+            for j in self.players:
+                self.dealcard(j, 1)
+        
+    def dealcard(self, player, num):
+        self.players[player].drawCard(numcard = num)
 
 
     def read_player_hand(self, player : int):

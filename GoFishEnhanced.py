@@ -3,19 +3,25 @@ import KAI
 import random
 import time
 
-#ToDo: Remind Player Of Last Guess based on target picked
+# ToDo: Remind Player Of Last Guess based on target picked
 
-deck = Cards.Deck(hand_size = 7)
+deck = Cards.Deck(hand_size=7)
+    #if players == 2:
+        #deck = Cards.Deck(hand_size=7)
+    #else:
+        #deck = Cards.Deck(hand_size=5)
 
-valid_input = {'A' : 'A', 'K' : 'K', 'Q' : 'Q', 'J' : 'J', '10' : 'T', '9' : '9',
-               '8' : '8', '7' : '7', '6' : '6', '5' : '5', '4' : '4', '3' : '3', 
-               '2' : '2', 'T' : 'T'}
+
+valid_input = {'A': 'A', 'K': 'K', 'Q': 'Q', 'J': 'J', '10': 'T', '9': '9',
+               '8': '8', '7': '7', '6': '6', '5': '5', '4': '4', '3': '3',
+               '2': '2', 'T': 'T'}
 
 game_over = False
 
 players = deck.players
 
-def find_card(card:str, player) -> list:
+
+def find_card(card: str, player) -> list:
     """It Is Assumed Card Is The Value, Not The Suit"""
     results = []
     count = 0
@@ -25,12 +31,15 @@ def find_card(card:str, player) -> list:
         count += 1
     return results
 
-def take_card(cards : list, player : int, target : int):
-    for c in sorted(cards, reverse = True):
-        players[player].in_hand.append(players[target].in_hand.pop(c))
-    print('{name} Got {cards}!'.format(cards = len(cards), name = players[player].name))
 
-def count_score(player : int):
+def take_card(cards: list, player: int, target: int):
+    for c in sorted(cards, reverse=True):
+        players[player].in_hand.append(players[target].in_hand.pop(c))
+    print('{name} Got {cards}!'.format(
+        cards=len(cards), name=players[player].name))
+
+
+def count_score(player: int):
     count_hand = {}
     global game_over
     for c in players[player].in_hand:
@@ -40,8 +49,9 @@ def count_score(player : int):
     for b in count_hand:
         if count_hand[b] == 4:
             players[player].score += 1
-            print('{name} Has A Book of {value}s!  Score is now {score}!'.format(value = deck.values[b], name = players[player].name, score = players[player].score))
-            for i in sorted(find_card(b, player), reverse = True):
+            print('{name} Has A Book of {value}s!  Score is now {score}!'.format(
+                value=deck.values[b], name=players[player].name, score=players[player].score))
+            for i in sorted(find_card(b, player), reverse=True):
                 deck.discard(player, i)
     # Check To See If Game Is Over
     if len(players[player].in_hand) == 0:
@@ -55,7 +65,8 @@ def count_score(player : int):
             if players[p].score == high_score:
                 winner.append(p)
         if len(winner) == 1:
-            print('{} Has Won With A Score Of {}!'.format(players[winner[0]].name, high_score))
+            print('{} Has Won With A Score Of {}!'.format(
+                players[winner[0]].name, high_score))
         else:
             print('We Have A Draw With A Score Of {}!'.format(high_score))
             for p in winner:
@@ -63,9 +74,7 @@ def count_score(player : int):
         game_over = True
 
 
-
-
-def ask_card(player : int, target : int, guess : str = None):
+def ask_card(player: int, target: int, guess: str = None):
     playguess = players[player].guesses
     playguess.setdefault(target, [])
     if guess == None:
@@ -74,15 +83,16 @@ def ask_card(player : int, target : int, guess : str = None):
     while valid_guess == False:
         if guess == None:
             if len(playguess[target]) > 0:
-                print("Previous Guesses: {}".format(playguess[target]))
+                print("Previous Guesses: {}".format(
+                    reversed(playguess[target])))
             request = input("Ask For A Card You Have: ")
         else:
             request = guess
-            
 
         if request in valid_input:
-            print('{Player} Guessed {guess} from {target}'.format(Player = players[player].name, guess = request, target = players[target].name))
-            
+            print('{Player} Guessed {guess} from {target}'.format(
+                Player=players[player].name, guess=request, target=players[target].name))
+
             playguess[target].append(request)
             if len(playguess[target]) > 3:
                 del playguess[target][0]
@@ -97,7 +107,7 @@ def ask_card(player : int, target : int, guess : str = None):
                 else:
                     print('Go Fish!')
                     #Draw Card, Then Check To See If It Was Card Asked For. If So, Asker Goes Again#
-                    draw = players[player].drawCard(text_output = True)
+                    draw = players[player].drawCard(text_output=True)
                     if len(draw) == 0:
                         return False
                     if players[player].isAI == False:
@@ -117,10 +127,11 @@ def ask_card(player : int, target : int, guess : str = None):
             print('Please Enter A Valid Card Value!')
             print(val_list)
 
+
 def gameplay_loop():
     playing = True
     for p in players:
-        players[p].guesses = {} #initialize a guessing dictionary
+        players[p].guesses = {}  # initialize a guessing dictionary
 
     while playing:
         for p in players:
@@ -134,7 +145,8 @@ def gameplay_loop():
                     gameplayers.remove(p)
                     if players[p].isAI:
                         target = random.choice(gameplayers)
-                        turn = ask_card(p, target, players[p].AI_data.guesscard())
+                        turn = ask_card(
+                            p, target, players[p].AI_data.guesscard())
                     else:
                         p_dict = {}
                         count = 0
@@ -156,13 +168,12 @@ def gameplay_loop():
                     break
 
 
-
 players[1].isAI = True
-players[1].AI_data = KAI.AI_Gofish(players[1],1)
+players[1].AI_data = KAI.AI_Gofish(players[1], 1)
 players[1].name = 'AI Bob'
 ai = players[1].AI_data
-#players[0].set_name()
-players[0].isAI = True
+# players[0].set_name()
+players[0].isAI = False
 players[0].AI_data = KAI.AI_Gofish(players[0])
 players[0].name = 'AI Alpha'
 
