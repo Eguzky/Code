@@ -5,6 +5,40 @@ import time
 
 # ToDo: Remind Player Of Last Guess based on target picked
 
+def game_setup() -> Cards.Deck:
+    def toInt(num) -> int:
+        inum = -1
+        try:
+            inum =  int(num)
+            
+        except ValueError:
+            print("Not a valid number, try again")
+        
+        finally:
+            return inum
+
+    goodtotal = False
+    while goodtotal == False:    
+        humans = -1
+        bots = -1
+
+        while humans <= -1:
+            humans = toInt(input('How Many Human Players? '))
+        
+        while bots <= -1:
+            bots = toInt(input('How Many AI Players? '))
+        
+        if humans + bots > 6:
+            print("Please play with no more than 6 players.")
+        elif humans + bots < 2:
+            print("There needs to be at least 2 players.")
+        else:
+            goodtotal = True
+    
+    
+
+    
+
 deck = Cards.Deck(hand_size=7)
     #if players == 2:
         #deck = Cards.Deck(hand_size=7)
