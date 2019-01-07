@@ -55,4 +55,11 @@ class personname():
     
     
     def __str__(self):
-        return self.first + " " + self.last
+        if self.first == "" and self.last == "":
+            return ""
+        elif self.last == "":
+            return self.first
+        elif self.first == "":
+            return self.last
+        else:
+            return self.first + " " + self.last

@@ -2,8 +2,9 @@ import CardsEnhanced as Cards
 import KAI
 import random
 import time
+import NameGenK as NameGen
 
-# ToDo: Remind Player Of Last Guess based on target picked
+
 
 def game_setup() -> Cards.Deck:
     def toInt(num) -> int:
@@ -35,15 +36,29 @@ def game_setup() -> Cards.Deck:
         else:
             goodtotal = True
     
-    
+    if humans + bots == 2:
+        deck = Cards.Deck(hand_size=7)
+    else:
+        deck = Cards.Deck(players = humans + bots, hand_size= 5)
+
+    count = 0
+    for player in deck.players:
+        pid = deck.players[player]
+        count += 1
+        if count <= humans:
+            pid.set_name()
+        else:
+            pid.isAI = True
+            pid.AI_data = KAI.AI_Gofish(pid, 1)
+            pid.name = "AI {}".format(NameGen.namegen())
+
+    return deck
+
 
     
 
-deck = Cards.Deck(hand_size=7)
-    #if players == 2:
-        #deck = Cards.Deck(hand_size=7)
-    #else:
-        #deck = Cards.Deck(hand_size=5)
+deck = game_setup()
+    
 
 
 valid_input = {'A': 'A', 'K': 'K', 'Q': 'Q', 'J': 'J', '10': 'T', '9': '9',
@@ -118,7 +133,7 @@ def ask_card(player: int, target: int, guess: str = None):
         if guess == None:
             if len(playguess[target]) > 0:
                 print("Previous Guesses: {}".format(
-                    reversed(playguess[target])))
+                    list(reversed(playguess[target]))))
             request = input("Ask For A Card You Have: ")
         else:
             request = guess
@@ -202,13 +217,5 @@ def gameplay_loop():
                     break
 
 
-players[1].isAI = True
-players[1].AI_data = KAI.AI_Gofish(players[1], 1)
-players[1].name = 'AI Bob'
-ai = players[1].AI_data
-# players[0].set_name()
-players[0].isAI = False
-players[0].AI_data = KAI.AI_Gofish(players[0])
-players[0].name = 'AI Alpha'
 
 gameplay_loop()
