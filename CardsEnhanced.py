@@ -9,19 +9,34 @@ import random
 
 class Deck:
 
-    suits = {'H' : 'Hearts', 'D' : 'Diamonds', 'C' : 'Clubs', 'S' : 'Spades'}
 
-    values = {'A' : 'Ace', 'K' : 'King', 'Q' : 'Queen', 'J' : 'Jack', 'T' : 'Ten',
-          '9' : 'Nine', '8' : 'Eight', '7' : 'Seven', '6' : 'Six', '5' : 'Five',
-           '4' : 'Four', '3' : 'Three', '2' : 'Two'}
 
     
+    class Card:
+        suits = {'H' : 'Hearts', 'D' : 'Diamonds', 'C' : 'Clubs', 'S' : 'Spades'}
+
+        values = {'A' : 'Ace', 'K' : 'King', 'Q' : 'Queen', 'J' : 'Jack', 'T' : 'Ten',
+                  '9' : 'Nine', '8' : 'Eight', '7' : 'Seven', '6' : 'Six', '5' : 'Five',
+                  '4' : 'Four', '3' : 'Three', '2' : 'Two'}
+        def __init__(self, value, suit):
+            self.suit = suit
+            self.value = value
+        
+        def raw_read(self):
+            return "{}{}".format(self.value, self.suit)
+        
+        def read(self):
+            return '{} of {}'.format(self.values[self.value], self.suits[self.suit])
+
+    suits = Card.suits
+    values = Card.values
+
     def build_deck(self) -> list:
         
         deck = []
         for s in self.suits:
             for v in self.values:
-                deck.append(v + s) # Example: 2H, Two of Hearts
+                deck.append(self.Card(v, s)) # Example: 2H, Two of Hearts
 
         return deck
 
@@ -30,8 +45,8 @@ class Deck:
             random.shuffle(self.cards)
 
     
-    def read_card(self, card:str) -> str:
-        return '{} of {}'.format(self.values[card[0]], self.suits[card[1]])
+    def read_card(self, card:Card) -> str:
+        return card.read()
 
 
     class Hand:
@@ -71,10 +86,10 @@ class Deck:
 
             
 
-        def __init__(self, outer):
+        def __init__(self, outer, hand_size : int = 5):
             self._outer = outer
             self.in_hand = []
-            #self.drawCard(hand_size)
+            self.drawCard(hand_size)
             self.score = 0
             self.name = ''
             self.isAI = False
@@ -91,13 +106,7 @@ class Deck:
         self.players = {}
         self.hand_limit = hand_limit
         for i in range(players):
-            self.players[i] = self.Hand(self)
-        for i in range(hand_size):
-            for j in self.players:
-                self.dealcard(j, 1)
-        
-    def dealcard(self, player, num):
-        self.players[player].drawCard(numcard = num)
+            self.players[i] = self.Hand(self, hand_size = hand_size)
 
 
     def read_player_hand(self, player : int):
