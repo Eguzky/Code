@@ -1,5 +1,6 @@
 import random
 from NameLists import male, female, last
+from Species import animals
 
 def male_namegen():
     male_group = []
@@ -17,13 +18,23 @@ def female_namegen():
     print('Female Names:')
     print("\n".join(female_group))
 
+def species_gen():
+    species_group = []
+    for x in range(1):
+        species_name = random.choice(animals).capitalize()
+        species_group.append(species_name)
+    print('Species:')
+    print("\n".join(species_group))
+
 def namegen():
     while True:
         gender = input('[M]ale or [F]emale? ')
         if gender.upper() == 'M':
             male_namegen()
+            species_gen()
         elif gender.upper() == 'F':
             female_namegen()
+            species_gen()
         else:
             print('Please use M or F')
             continue
