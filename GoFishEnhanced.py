@@ -55,11 +55,8 @@ def game_setup() -> Cards.Deck:
     return deck
 
 
-    
-
 deck = game_setup()
     
-
 
 valid_input = {'A': 'A', 'K': 'K', 'Q': 'Q', 'J': 'J', '10': 'T', '9': '9',
                '8': '8', '7': '7', '6': '6', '5': '5', '4': '4', '3': '3',
@@ -126,11 +123,11 @@ def count_score(player: int):
 def ask_card(player: int, target: int, guess: str = None):
     playguess = players[player].guesses
     playguess.setdefault(target, [])
-    if guess == None:
+    if guess is None:
         deck.read_player_hand(player)
     valid_guess = False
-    while valid_guess == False:
-        if guess == None:
+    while valid_guess is False:
+        if guess is None:
             if len(playguess[target]) > 0:
                 print("Previous Guesses: {}".format(
                     list(reversed(playguess[target]))))
@@ -184,7 +181,7 @@ def gameplay_loop():
 
     while playing:
         for p in players:
-            if playing == False:
+            if playing is False:
                 break
             turn = True
             print("{}'s turn!".format(players[p].name))
@@ -215,7 +212,6 @@ def gameplay_loop():
                 if game_over:
                     playing = False
                     break
-
 
 
 gameplay_loop()
